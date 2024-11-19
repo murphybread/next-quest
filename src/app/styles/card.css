@@ -19,8 +19,8 @@
 
 
   .card-inner {
-    width: 200px;
-    height: 300px;
+    width: 224px;
+    height: 324px;
     transform-style: preserve-3d;
     transform: rotateY(0deg); /* 초기 상태 */
     transition: transform 0.6s ease-out;
@@ -68,9 +68,6 @@
     0% {
       transform: rotateY(0deg);
     }
-    50% {
-      transform: rotateY(180deg);
-    }
     100% {
       transform: rotateY(360deg);
     }
@@ -79,9 +76,6 @@
   @keyframes slowSpin {
     0% {
       transform: rotateY(0deg);
-    }
-    50% {
-      transform: rotateY(180deg);
     }
     100% {
       transform: rotateY(360deg);
