@@ -26,12 +26,14 @@ const Card: React.FC = () => {
         ${animationStep === 3 ? 'growing' : ''}`}
       onClick={flipCard}
     >
-      <div className="card-inner">
-        <div className="card-front">
-          <h2>{frontText[animationStep]}</h2>
-        </div>
-        <div className="card-back">
-          <h2>Back</h2>
+      <div className="card-border">
+        <div className="card-inner">
+          <div className="card-front">
+            <h2>{frontText[animationStep]}</h2>
+          </div>
+          <div className="card-back">
+            <h2>Back</h2>
+          </div>
         </div>
       </div>
     </div>
