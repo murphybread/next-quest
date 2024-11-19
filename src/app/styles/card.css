@@ -1,29 +1,33 @@
 /* 카드 레이아웃 */
 .card {
-  perspective: 1000px; /* 3D 효과를 위한 깊이 */
+  perspective: 1000px; /* 3D 효과 */
 }
 
 .card-border {
-  width: 220px; /* 테두리를 포함한 너비 */
-  height: 320px; /* 테두리를 포함한 높이 */
-  padding: 10px; /* 테두리 두께 */
-  background: linear-gradient(45deg, hsl(34, 84%, 70%), #ecf3b9); /* 테두리 색상 */
-  border-radius: 10px; /* 테두리 모서리 둥글게 */
+  width: 220px;
+  height: 320px;
+  padding: 10px;
+  background: linear-gradient(45deg, hsl(34, 84%, 70%), #ecf3b9);
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: transform 0.6s ease-out; /* 상태 변경 애니메이션 */
 }
-
 
 .card-inner {
   width: 200px;
   height: 300px;
-  transition: transform 0.6s ease-out; /* 애니메이션 속도 */
   transform-style: preserve-3d;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  transform: rotateY(0deg); /* 초기 상태 */
+  transition: transform 0.6s ease-out;
+}
+
+.card-image {
+  width: 100%; /* card-front와 card-back의 크기에 맞게 조정 */
+  height: 100%;
+  object-fit: cover; /* 비율 유지하며 card-inner 크기 채움 */
+  border-radius: 5px; /* 내부 카드의 모서리 둥글게 */
 }
 
 /* 앞면과 뒷면 */
@@ -32,39 +36,30 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; /* 뒤집힐 때 보이지 않게 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2em;
+  backface-visibility: hidden; /* 뒤집힐 때 숨김 */
 }
 
 .card-front {
-  background-color: #af4412;
+  transform: rotateY(0deg); /* 앞면 기본 상태 */
 }
 
 .card-back {
-  background-color: #333;
-  color: white;
-  transform: rotateY(180deg); /* 뒷면은 180도 회전 */
+  transform: rotateY(180deg); /* 뒷면 기본 상태 */
 }
 
-/* 첫 번째 클릭 시 계속 회전하는 애니메이션 */
+/* 회전 애니메이션 */
 .card.spinning .card-border {
   animation: spin 1s linear infinite;
 }
 
-/* 두 번째 클릭 시 회전 속도가 점점 느려지면서 멈추는 애니메이션 */
 .card.slow-spin .card-border {
-  animation: slowSpin 3s ease-out forwards; /* 점점 느려지며 멈춤 */
+  animation: slowSpin 3s ease-out forwards;
 }
 
-/* 세 번째 클릭 시 크기 증가 애니메이션 */
 .card.growing .card-border {
   animation: grow 1.5s ease-out forwards;
 }
 
-/* 회전 애니메이션 */
 @keyframes spin {
   0% {
     transform: rotateY(0deg);
@@ -74,25 +69,20 @@
   }
 }
 
-/* 속도가 점점 느려지는 회전 애니메이션 */
 @keyframes slowSpin {
   0% {
     transform: rotateY(0deg);
   }
-  50% {
-    transform: rotateY(180deg);
-  }
   100% {
-    transform: rotateY(360deg); /* 마지막에는 멈춤 */
+    transform: rotateY(360deg);
   }
 }
 
-/* 크기 증가 애니메이션 */
 @keyframes grow {
   0% {
     transform: scale(1);
   }
   100% {
-    transform: scale(1.15); /* 크기 커짐 */
+    transform: scale(1.15);
   }
 }
