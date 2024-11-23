@@ -35,8 +35,12 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+# 참조
+
 styled-components
-참조 styled-components 사용방법 https://www.daleseo.com/react-styled-components/
+
+- styled-components 사용방법 https://www.daleseo.com/react-styled-components/
 
 framer-motion
-참조: framer-motion 개요: https://velog.io/@keumky1/Framer-Motion-%EC%9E%85%EB%AC%B8%ED%95%98%EA%B8%B0
+
+- framer-motion 개요: https://velog.io/@keumky1/Framer-Motion-%EC%9E%85%EB%AC%B8%ED%95%98%EA%B8%B0
