@@ -1,40 +1,29 @@
 "use client";
-import { motion } from "framer-motion";
+
 import React, { useState } from "react";
+import ClickableRotateRectangle from "@components/ClickableRotateRectangle";
 
-const AnimatedBox: React.FC = () => {
-  const [isRight, setIsRight] = useState(true); // 방향 상태
-
-  const handleClick = () => {
-    setIsRight((prev) => !prev); // 방향 전환
-  };
+const Page: React.FC = () => {
+  const [isActive, setIsActive] = useState(false); // 활성화 상태 관리
 
   return (
-    <motion.div
-      onClick={handleClick} // 클릭 이벤트
-      initial={{ x: 0, rotate: 0 }} // 초기 상태
-      animate={
-        isRight
-          ? { x: 100, rotate: 360 } // 오른쪽으로 이동하며 360도 회전
-          : { x: -100, rotate: -360 } // 왼쪽으로 이동하며 -360도 회전
-      }
-      transition={{
-        duration: 1, // 애니메이션 지속 시간
-        ease: "easeInOut", // 부드럽게 연결
-      }}
-      style={{
-        width: "100px",
-        height: "100px",
-        backgroundColor: "skyblue",
-        borderRadius: "10px",
-        cursor: "pointer",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)", // 화면 중앙 정렬
-      }}
-    />
+    <div>
+      <button
+        onClick={() => setIsActive((prev) => !prev)} // 활성화 상태 토글
+        style={{
+          position: "fixed", // 화면 기준 고정
+          top: "50%", // 세로 중앙
+          left: "20px", // 화면 왼쪽에서 20px
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        {isActive ? "Deactivate" : "Activate"} Rectangle
+      </button>
+      {isActive && <ClickableRotateRectangle />}{" "}
+      {/* 활성화 상태에 따라 렌더링 */}
+    </div>
   );
 };
 
-export default AnimatedBox;
+export default Page;
