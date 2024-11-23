@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Card from '@components/Card';
-import '@styles/global.css';
-
+import React, { useState } from "react";
+import Card from "@components/Card";
+import "@styles/global.css";
 
 const HomePage: React.FC = () => {
   return (
