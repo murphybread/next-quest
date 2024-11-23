@@ -2,26 +2,22 @@
 
 import React, { useState } from "react";
 import ClickableRotateRectangle from "@components/ClickableRotateRectangle";
+import DynamicButton from "@components/DynamicButton";
+import RotatingScaleComponent from "../../components/RotatingScaleComponent";
 
 const Page: React.FC = () => {
-  const [isActive, setIsActive] = useState(false); // 활성화 상태 관리
-
   return (
     <div>
-      <button
-        onClick={() => setIsActive((prev) => !prev)} // 활성화 상태 토글
-        style={{
-          position: "fixed", // 화면 기준 고정
-          top: "50%", // 세로 중앙
-          left: "20px", // 화면 왼쪽에서 20px
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        {isActive ? "Deactivate" : "Activate"} Rectangle
-      </button>
-      {isActive && <ClickableRotateRectangle />}{" "}
-      {/* 활성화 상태에 따라 렌더링 */}
+      <DynamicButton
+        component={ClickableRotateRectangle}
+        componentName="Clickable Rotate Rectangle"
+        index={0}
+      ></DynamicButton>
+      <DynamicButton
+        component={RotatingScaleComponent}
+        componentName="RotatingScaleComponent"
+        index={1}
+      ></DynamicButton>
     </div>
   );
 };
