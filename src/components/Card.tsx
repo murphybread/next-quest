@@ -5,7 +5,7 @@ const frontImages: Record<number, string> = {
   0: "/images/initial_front.jpg", // 앞면 이미지
   1: "/images/question_1.jpg",
   2: "/images/question_1.jpg",
-  3: "https://storage.googleapis.com/magic-prompt-well/images/A%20small%2C%20twinkling%20star%20with%20a%20gentle%20golden%20glow.%20It%20floats%20just%20above%20the%20caster%27s%20shoulder%2C%20leaving%20a%20trail%20of%20shimmering%20stardust.%20Its%20light%20is%20soothing%20and%20warm%2C%20capable%20of%20providing%20guidance%20in%20the%20darkest%20of%20nights.png",
+  3: "/images/answer_1.jpg",
 };
 
 const backImages = "/images/card_back.jpg"; // 뒷면 이미지
