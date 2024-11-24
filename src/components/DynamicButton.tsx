@@ -21,8 +21,22 @@ const Container = styled.div`
   position: relative;
 `;
 
+const InfoContainer = styled.div`
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  white-space: pre-wrap;
+`;
+
 interface DynamicButtonProps {
-  component: React.FC; // 렌더링할 컴포넌트 타입
+  component: React.FC & { description: string }; // 렌더링할 컴포넌트 타입
   componentName: string; // 버튼에 표시될 이름
   index: number; // 버튼의 순서
 }
@@ -46,7 +60,16 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       </StyledButton>
 
       {/* 동적으로 렌더링되는 컴포넌트 */}
-      {isActive && <Component />}
+      {isActive && (
+        <>
+          <Component />
+          {/* 설명 컨테이너 */}
+          <InfoContainer>
+            <h4>{componentName}</h4>
+            <p>{Component.description}</p>
+          </InfoContainer>
+        </>
+      )}
     </Container>
   );
 };
