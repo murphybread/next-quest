@@ -16,10 +16,6 @@ const StyledMotionDiv = styled(motion.div)`
   transform: translate(-50%, -50%);
 `;
 
-interface DescriptiveComponent extends React.FC {
-  description: string; // 설명 메타데이터
-}
-
 const ClickableRotateRectangle: React.FC = () => {
   const [isRight, setIsRight] = useState(true); // 방향 상태
 
@@ -44,7 +40,7 @@ const ClickableRotateRectangle: React.FC = () => {
   );
 };
 
-ClickableRotateRectangle.description = `
+(ClickableRotateRectangle as any).description = `
 1. 사각형을 클릭할 때마다 오른쪽으로 이동하며 360도 회전합니다.
 2. 다시 클릭하면 왼쪽으로 이동하며 -360도 회전합니다.
 `;

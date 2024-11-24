@@ -35,8 +35,12 @@ const InfoContainer = styled.div`
   white-space: pre-wrap;
 `;
 
+interface DescriptiveComponent extends React.FC {
+  description?: string;
+}
+
 interface DynamicButtonProps {
-  component: React.FC & { description: string }; // 렌더링할 컴포넌트 타입
+  component: DescriptiveComponent; // 렌더링할 컴포넌트 타입
   componentName: string; // 버튼에 표시될 이름
   index: number; // 버튼의 순서
 }

@@ -12,10 +12,6 @@ const StyledMotionDiv = styled(motion.div)`
   border-radius: 10px;
 `;
 
-interface DescriptiveComponent extends React.FC {
-  description: string; // 설명 메타데이터
-}
-
 const RotatingScaleComponent: React.FC = () => {
   // MotionValue와 Transform 정의
   const rotate = useMotionValue(0); // 회전 상태 구독
@@ -48,7 +44,7 @@ const RotatingScaleComponent: React.FC = () => {
   );
 };
 
-RotatingScaleComponent.description = `
+(RotatingScaleComponent as any).description = `
 1. 회전과 스케일 변화를 동시에 적용합니다.
 2. 회전이 0-270도변화시 스케일이 0-1로 변화합니다.
 `;
