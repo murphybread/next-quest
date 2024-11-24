@@ -1,16 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
+import ClickableRotateRectangle from "@components/ClickableRotateRectangle";
+import DynamicButton from "@components/DynamicButton";
+import RotatingScaleComponent from "@components/RotatingScaleComponent";
 import Card from "@components/Card";
-import "@styles/global.css";
 
-const HomePage: React.FC = () => {
+const Page: React.FC = () => {
   return (
-    <div className="main-board">
-      <h1>Card Flip Animation ( Click 4 times animations)</h1>
-      <Card />
+    <div>
+      <DynamicButton
+        component={ClickableRotateRectangle}
+        componentName="Clickable Rotate Rectangle"
+        index={0}
+      ></DynamicButton>
+      <DynamicButton
+        component={RotatingScaleComponent}
+        componentName="RotatingScaleComponent"
+        index={1}
+      ></DynamicButton>
+
+      <DynamicButton
+        component={Card}
+        componentName="Card"
+        index={2}
+      ></DynamicButton>
     </div>
   );
 };
 
-export default HomePage;
+export default Page;
