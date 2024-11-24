@@ -2,6 +2,15 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import React from "react";
+import styled from "styled-components";
+
+// 기본 스타일 정의
+const StyledMotionDiv = styled(motion.div)`
+  background: linear-gradient(90deg, #ffa0ae 0%, #aacaef 75%);
+  height: 100px;
+  width: 100px;
+  border-radius: 10px;
+`;
 
 const RotatingScaleComponent: React.FC = () => {
   // MotionValue와 Transform 정의
@@ -19,12 +28,8 @@ const RotatingScaleComponent: React.FC = () => {
   };
 
   return (
-    <motion.div
+    <StyledMotionDiv
       style={{
-        background: "linear-gradient(90deg, #ffa0ae 0%, #aacaef 75%)",
-        height: "100px",
-        width: "100px",
-        borderRadius: "10px",
         rotate, // MotionValue 연결
         scale, // Transform 연결
       }}
