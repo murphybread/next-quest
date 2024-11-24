@@ -39,8 +39,8 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
       {/* 버튼 */}
       <StyledButton
         onClick={() => setIsActive((prev) => !prev)}
-        $isActive={isActive} // Transient Prop으로 전달
-        $index={index} // Transient Prop으로 전달
+        $isActive={isActive}
+        $index={index}
       >
         {isActive ? `Deactivate ${componentName}` : `Activate ${componentName}`}
       </StyledButton>

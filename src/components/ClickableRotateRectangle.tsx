@@ -2,6 +2,19 @@
 
 import { motion } from "framer-motion";
 import React, { useState } from "react";
+import styled from "styled-components";
+
+const StyledMotionDiv = styled(motion.div)`
+  width: 100px;
+  height: 100px;
+  background-color: skyblue;
+  border-radius: 10px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const ClickableRotateRectangle: React.FC = () => {
   const [isRight, setIsRight] = useState(true); // 방향 상태
@@ -11,7 +24,7 @@ const ClickableRotateRectangle: React.FC = () => {
   };
 
   return (
-    <motion.div
+    <StyledMotionDiv
       onClick={handleClick} // 클릭 이벤트
       initial={{ x: 0, rotate: 0 }} // 초기 상태
       animate={
@@ -22,17 +35,6 @@ const ClickableRotateRectangle: React.FC = () => {
       transition={{
         duration: 1, // 애니메이션 지속 시간
         ease: "easeInOut", // 부드럽게 연결
-      }}
-      style={{
-        width: "100px",
-        height: "100px",
-        backgroundColor: "skyblue",
-        borderRadius: "10px",
-        cursor: "pointer",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)", // 화면 중앙 정렬
       }}
     />
   );
