@@ -1,88 +1,72 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
+import InfoContainer from "@components/InfoContainer";
 // Styled-components
-const StyledButton = styled.button<{ $isActive: boolean; $index: number }>`
-  position: fixed;
-  left: 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: ${(props) => (props.$isActive ? "green" : "gray")};
+const StyledButton = styled.button<{ $isActive: boolean }>`
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: ${(props) => (props.$isActive ? "green" : "grey")};
   color: white;
   border: none;
-  padding: 10px 20px;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
-  top: ${(props) =>
-    `${20 + props.$index * 60}px`}; // 각 버튼이 겹치지 않도록 위치 조정
+  cursor: pointer;
 `;
 
-const Container = styled.div`
-  position: relative;
-`;
-
-const InfoContainer = styled.div`
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+const AnimationContainer = styled.div`
+  margin: 20px 0;
   padding: 20px;
-  border-radius: 8px;
-  max-width: 300px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  white-space: pre-wrap;
+  background-color: lightgray;
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
-interface DescriptiveComponent extends React.FC {
-  description?: string;
-}
-
-interface DynamicButtonProps {
-  component: DescriptiveComponent; // 렌더링할 컴포넌트 타입
-  componentName: string; // 버튼에 표시될 이름
-  index: number; // 버튼의 순서
-}
-
-const DynamicButton: React.FC<DynamicButtonProps> = ({
-  component: Component,
-  componentName,
-  index,
-}) => {
+const DynamicButton = ({ component: Component, componentName }: any) => {
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
   const router = useRouter();
-  const [isActive, setIsActive] = useState(false); // 활성화 상태 관리
-
-  const handleRouting = () => {
-    router.push(`/${componentName}`); // 라우팅
-  };
 
   return (
-    <Container>
-      {/* 버튼 */}
+    <div>
       <StyledButton
         onClick={() => {
-          setIsActive((prev) => !prev);
-          handleRouting(); // URL 변경
+          setIsPreviewVisible((prev) => !prev); // 프리뷰 상태 활성화
         }}
-        $isActive={isActive}
-        $index={index}
+        $isActive={isPreviewVisible}
       >
-        {isActive ? `Deactivate ${componentName}` : `Activate ${componentName}`}
+        Show {componentName}
       </StyledButton>
 
-      {/* 동적으로 렌더링되는 컴포넌트 */}
-      {isActive && (
+      {/* 애니메이션과 프리뷰 */}
+      {isPreviewVisible && (
         <>
-          <Component />
-          {/* 설명 컨테이너 */}
-          <InfoContainer>
-            <h4>{componentName}</h4>
-            <p>{Component.description}</p>
-          </InfoContainer>
+          <InfoContainer
+            componentName={componentName}
+            description={Component.description}
+          />
+          <AnimationContainer>
+            <Component /> {/* 컴포넌트 프리뷰 */}
+            <StyledButton
+              onClick={() => {
+                router.push(`/${componentName}`); // 라우팅
+              }}
+              $isActive={isPreviewVisible}
+            >
+              View Details
+            </StyledButton>
+          </AnimationContainer>
         </>
       )}
-    </Container>
+    </div>
   );
 };
 
