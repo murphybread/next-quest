@@ -11,7 +11,7 @@ const Page: React.FC = () => {
     <div>
       <DynamicButton
         component={ClickableRotateRectangle}
-        componentName="Clickable Rotate Rectangle"
+        componentName="ClickableRotateRectangle"
         index={0}
       ></DynamicButton>
       <DynamicButton
