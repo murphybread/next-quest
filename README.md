@@ -1,3 +1,7 @@
+1. 각 컴포넌트 소개 페이지
+   - 각 컴포넌트별 페이지로 이동
+2. 컴포넌트를 원하는 형태로 조합하는 페이지
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

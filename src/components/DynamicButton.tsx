@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import { useRouter } from "next/navigation";
 // Styled-components
 const StyledButton = styled.button<{ $isActive: boolean; $index: number }>`
   position: fixed;
@@ -50,13 +50,21 @@ const DynamicButton: React.FC<DynamicButtonProps> = ({
   componentName,
   index,
 }) => {
+  const router = useRouter();
   const [isActive, setIsActive] = useState(false); // 활성화 상태 관리
+
+  const handleRouting = () => {
+    router.push(`/${componentName}`); // 라우팅
+  };
 
   return (
     <Container>
       {/* 버튼 */}
       <StyledButton
-        onClick={() => setIsActive((prev) => !prev)}
+        onClick={() => {
+          setIsActive((prev) => !prev);
+          handleRouting(); // URL 변경
+        }}
         $isActive={isActive}
         $index={index}
       >
