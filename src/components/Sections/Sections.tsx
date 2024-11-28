@@ -1,9 +1,6 @@
-import SmoothScroll from "@components/SmoothScroll";
-
-export default function Home() {
+export default function Sections() {
   return (
-    <SmoothScroll>
-      {/* 섹션 1 */}
+    <>
       <div
         style={{
           height: "100vh",
@@ -15,8 +12,6 @@ export default function Home() {
       >
         <h1 style={{ color: "white" }}>Page 1</h1>
       </div>
-
-      {/* 섹션 2 */}
       <div
         style={{
           height: "100vh",
@@ -28,8 +23,6 @@ export default function Home() {
       >
         <h1 style={{ color: "white" }}>Page 2</h1>
       </div>
-
-      {/* 섹션 3 */}
       <div
         style={{
           height: "100vh",
@@ -41,8 +34,6 @@ export default function Home() {
       >
         <h1 style={{ color: "white" }}>Page 3</h1>
       </div>
-
-      {/* 섹션 4 */}
       <div
         style={{
           height: "100vh",
@@ -54,6 +45,6 @@ export default function Home() {
       >
         <h1 style={{ color: "white" }}>Page 4</h1>
       </div>
-    </SmoothScroll>
+    </>
   );
 }

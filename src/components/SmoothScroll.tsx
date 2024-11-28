@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 
 function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const containerRef = useRef<HTMLDivElement>(null); // 전체 컨테이너 참조
+  const containerRef = useRef<HTMLDivElement>(null); // DOM의 현재 <div> 요소를 참조하여 자식 섹션 탐색 + scrollIntoView로 스크롤 이동 제어
   const [currentPage, setCurrentPage] = useState(0); // 현재 활성화된 섹션
   const isScrolling = useRef(false); // 스크롤 중인지 추적
 
@@ -16,6 +16,7 @@ function SmoothScroll({ children }: { children: React.ReactNode }) {
     const deltaY = event.deltaY; // 스크롤 방향
     const sections = containerRef.current?.children;
 
+    // 만약 페이지가 1개이하면 특별한 동작 안함
     if (!sections || sections.length <= 1) {
       console.warn(
         "Single section or no sections found. Skipping scroll behavior.",
@@ -25,15 +26,17 @@ function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     let nextPage = currentPage;
 
+    // 아래로이동시 및 현재페이지가 마지막이 아니면 다음 div(페이지)로이동
+    // 스크롤 위로 이동시 현재페이지가 0이 아니면 이전 div(페이지)로 이동
     if (deltaY > 0 && currentPage < sections.length - 1) {
-      // 아래로 스크롤
       nextPage += 1;
     } else if (deltaY < 0 && currentPage > 0) {
       // 위로 스크롤
       nextPage -= 1;
     }
 
-    // 이동
+    //scrollIntoView 를 사용하기위해 Element에서 HtmlElement로 캐스팅
+    // scroolIntoView로 특정 섹션으로 화면이동
     (sections[nextPage] as HTMLElement).scrollIntoView({
       behavior: "smooth",
     });
@@ -43,9 +46,9 @@ function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => handleScroll(event);
 
-    window.addEventListener("wheel", handleWheel);
+    window.addEventListener("wheel", handleWheel); // wheel 이벤트를 추적하며 발견시에 handleWheel 호출
 
-    return () => window.removeEventListener("wheel", handleWheel); // Cleanup
+    return () => window.removeEventListener("wheel", handleWheel); // currentPage가 변경되면 wheel 이벤트 제거
   }, [currentPage]);
 
   return (

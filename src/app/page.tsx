@@ -5,7 +5,7 @@ import ClickableRotateRectangle from "@components/ClickableRotateRectangle";
 import DynamicButton from "@components/DynamicButton";
 import RotatingScaleComponent from "@components/RotatingScaleComponent";
 import Card from "@components/Card";
-import SmoothScroll from "@components/SmoothScroll";
+import SmoothScrollwithSection from "@components/SmoothScrollwithSection";
 
 const Page: React.FC = () => {
   return (
@@ -28,8 +28,8 @@ const Page: React.FC = () => {
       ></DynamicButton>
 
       <DynamicButton
-        component={SmoothScroll}
-        componentName="SmoothScroll"
+        component={SmoothScrollwithSection}
+        componentName="SmoothScrollwithSection"
         index={3}
       ></DynamicButton>
     </div>
