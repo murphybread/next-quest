@@ -6,6 +6,7 @@ import DynamicButton from "@components/DynamicButton";
 import RotatingScaleComponent from "@components/RotatingScaleComponent";
 import Card from "@components/Card";
 import SmoothScrollwithSection from "@components/SmoothScrollwithSection";
+import HeroBanner from "@components/HeroBanner";
 
 const Page: React.FC = () => {
   return (
@@ -31,6 +32,12 @@ const Page: React.FC = () => {
         component={SmoothScrollwithSection}
         componentName="SmoothScrollwithSection"
         index={3}
+      ></DynamicButton>
+
+      <DynamicButton
+        component={HeroBanner}
+        componentName="HeroBanner"
+        index={4}
       ></DynamicButton>
     </div>
   );

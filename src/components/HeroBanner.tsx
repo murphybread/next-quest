@@ -98,4 +98,9 @@ const HeroBanner = () => {
   );
 };
 
+(HeroBanner as any).description = `
+1. 자동으로 5초마다 다음 슬라이들 이동
+2. 오른쪽 아래의 좌우 버튼을 통해 next, prev 슬라이드 이동
+`;
+
 export default HeroBanner;
