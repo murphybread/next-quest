@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "motion/react";
 import React from "react";
 import styled from "styled-components";
 
