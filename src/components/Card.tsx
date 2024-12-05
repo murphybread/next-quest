@@ -9,7 +9,7 @@ const spin = keyframes`
 
 const slowSpin = keyframes`
   0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); } /* 추가 1바퀴 */
+  100% { transform: rotateY(720deg); } /* 추가 1바퀴 */
 `;
 
 const grow = keyframes`
@@ -147,9 +147,20 @@ const backImage = "/images/card_back.jpg";
 
 const Card = () => {
   const [animationStep, setAnimationStep] = useState<number>(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const flipCard = () => {
-    setAnimationStep((prevStep) => (prevStep + 1) % 4);
+  const startAnimation = () => {
+    if (isAnimating) return; // 이미 애니메이션 중이면 중복 실행 방지
+    setIsAnimating(true);
+
+    // 단계적으로 애니메이션 실행
+    setAnimationStep(1); // 회전 시작
+    setTimeout(() => setAnimationStep(2), 5000); // 느린 회전
+    setTimeout(() => setAnimationStep(3), 7000); // 크기 증가
+    setTimeout(() => {
+      setAnimationStep(0); // 초기화
+      setIsAnimating(false); // 애니메이션 종료
+    }, 10000);
   };
 
   const animationState =
@@ -159,12 +170,17 @@ const Card = () => {
         ? "slow-spin"
         : animationStep === 3
           ? "growing"
-          : "none"; // 기본값을 none으로 설정하여 애니메이션 안함
+          : "none";
 
   return (
-    <CardContainer onClick={flipCard}>
+    <CardContainer onClick={startAnimation}>
       <CardBorder $animationState={animationState} $grade="legendary">
-        <CardInner>
+        <CardInner
+          style={{
+            transform:
+              animationStep === 3 ? "rotateY(180deg)" : "rotateY(0deg)", // 단계에 따라 앞뒤 변경
+          }}
+        >
           <CardFront>
             <CardImage
               src={frontImages[animationStep]}
