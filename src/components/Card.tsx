@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
+
+const BOX_SHADOW = {
+  BLUR_RADIUS: "120px",
+  SHADOW_RADIUS: "30px",
+};
 
 // 애니메이션 정의
 const spin = keyframes`
   0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(1800deg); } /* 기본 5바퀴 */
+  100% { transform: rotateY(1440deg); } /* 기본 5바퀴 */
 `;
 
 const slowSpin = keyframes`
@@ -19,7 +24,7 @@ const grow = keyframes`
 
 const enhancedBlueGlow = keyframes`
   0%, 100% { box-shadow: 0 0 40px rgba(0, 0, 255, 0); }
-  50% { box-shadow: 0 0 80px rgba(0, 0, 255, 1); }
+  50% { box-shadow: 0 0 ${BOX_SHADOW["BLUR_RADIUS"]} ${BOX_SHADOW["SHADOW_RADIUS"]} rgba(0, 0, 255, 1); }
 `;
 
 const enhancedGoldGlow = keyframes`
@@ -28,27 +33,52 @@ const enhancedGoldGlow = keyframes`
 `;
 
 const enhancedRainbowGlow = keyframes`
-  0%, 25% { box-shadow: 0 0 40px rgba(255, 0, 0, 1); }
-  50% { box-shadow: 0 0 80px rgba(0, 255, 0, 1); }
-  75% { box-shadow: 0 0 80px rgba(0, 0, 255, 1); }
-  100% { box-shadow: 0 0 80px rgba(255, 255, 0, 1); }
+  0%, 25% { box-shadow: 0 0 200px rgba(255, 0, 0, 1); }
+  50% { box-shadow: 0 0 200px rgba(0, 255, 0, 1); }
+  75% { box-shadow: 0 0 200px rgba(0, 0, 255, 1); }
+  100% { box-shadow: 0 0 200px rgba(255, 255, 0, 1); }
 `;
 
 const particleEffect = keyframes`
-  0% { opacity: 1; transform: scale(1) translate(0, 0); }
-  100% { opacity: 0; transform: scale(2) translate(calc(100px * var(--x)), calc(100px * var(--y))); }
+  0% { 
+    opacity: 1; 
+    transform: scale(0.5) translate(0, 0);
+  }
+  100% { 
+    opacity: 0; 
+    transform: scale(2) translate(
+      calc(var(--translateX, 0) * 100px), 
+      calc(var(--translateY, 0) * 100px)
+    );
+  }
 `;
 
-const Particle = styled.div`
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  animation: ${particleEffect} 1s ease-out infinite;
-  transform-origin: center;
-  --x: ${(props: { x: number }) => props.x}; /* x축 방향 */
-  --y: ${(props: { y: number }) => props.y}; /* y축 방향 */
+const particleAnimation = css`
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.5),
+      transparent 70%
+    );
+    animation: ${particleEffect} 2s ease-out infinite;
+  }
+  &::before {
+    --translateX: 0.5;
+    --translateY: -0.7;
+  }
+  &::after {
+    --translateX: -0.5;
+    --translateY: 0.7;
+  }
 `;
 
 // 등급별 애니메이션 조합
@@ -61,24 +91,25 @@ const GradeAnimations = {
   `,
   unique: css`
     animation:
-      ${spin} 5s linear forwards,
+      ${spin} 4s linear forwards,
+      ${slowSpin} 1s ease-in 4s forwards,
+      ${enhancedBlueGlow} 1s linear 5s infinite,
       ${slowSpin} 1s ease-in 5s forwards,
-      ${enhancedBlueGlow} 1s linear 6s infinite,
-      ${slowSpin} 1s ease-in 6s forwards,
-      ${enhancedGoldGlow} 1s linear 7s infinite;
+      ${enhancedGoldGlow} 1s linear 6s infinite;
   `,
   legendary: css`
     animation:
-      ${spin} 5s linear forwards,
-      ${slowSpin} 1s ease-in 5s forwards,
-      ${enhancedBlueGlow} 1s linear 6s infinite,
+      ${spin} 4s linear forwards,
+      ${slowSpin} 1s ease-in 4s forwards,
+      ${enhancedBlueGlow} 1s linear 5s infinite,
       ${slowSpin} 1s ease-in 6s forwards,
       ${enhancedGoldGlow} 1s linear 7s infinite,
-      ${slowSpin} 1s ease-in 7s forwards,
-      ${enhancedRainbowGlow} 1s linear 8s infinite;
+      ${slowSpin} 1s ease-in 8s forwards,
+      ${enhancedRainbowGlow} 1s linear 9s infinite;
+    ${particleAnimation}
   `,
   default: css`
-    animation: ${spin} 5s linear forwards;
+    animation: ${spin} 4s linear forwards;
   `,
 };
 
@@ -151,6 +182,7 @@ const Card = () => {
 
   const startAnimation = () => {
     if (isAnimating) return; // 이미 애니메이션 중이면 중복 실행 방지
+
     setIsAnimating(true);
 
     // 단계적으로 애니메이션 실행
@@ -158,9 +190,21 @@ const Card = () => {
     setTimeout(() => setAnimationStep(2), 5000); // 느린 회전
     setTimeout(() => setAnimationStep(3), 7000); // 크기 증가
     setTimeout(() => {
-      setAnimationStep(0); // 초기화
-      setIsAnimating(false); // 애니메이션 종료
+      setIsAnimating(false); // 애니메이션 종료 상태로 변경
     }, 10000);
+  };
+
+  const handleClick = () => {
+    if (!isAnimating) {
+      // 애니메이션 중이 아닐 때만 처리
+      if (animationStep === 0) {
+        // 초기 상태에서 클릭하면 애니메이션 시작
+        startAnimation();
+      } else {
+        // 애니메이션이 끝난 상태에서 클릭하면 초기화
+        setAnimationStep(0);
+      }
+    }
   };
 
   const animationState =
@@ -173,12 +217,12 @@ const Card = () => {
           : "none";
 
   return (
-    <CardContainer onClick={startAnimation}>
-      <CardBorder $animationState={animationState} $grade="legendary">
+    <CardContainer onClick={handleClick}>
+      <CardBorder $animationState={animationState} $grade="rare">
         <CardInner
           style={{
             transform:
-              animationStep === 3 ? "rotateY(180deg)" : "rotateY(0deg)", // 단계에 따라 앞뒤 변경
+              animationStep === 3 ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
         >
           <CardFront>
@@ -198,7 +242,7 @@ const Card = () => {
 
 (Card as any).description = `
 4번의 클릭으로 한 사이클이 동작합니다.
-1. 초기상태 일반 카드 앞면
+1. 초기상태 일반 카드 앞면 (대기 상태)
 2. 첫번 째 클릭으로 카드가 회전하면서 어떤 카드가 나올지 숨겨집니다. (무한 회전)
 3. 두번 째 클릭으로 카드가 천천히 속도가 느려지다가 멈춥니다.
 4. 세번 째 클릭으로 카드가 커지면서 공개됩니다.
