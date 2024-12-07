@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ClickableRotateRectangle from "@components/ClickableRotateRectangle";
 import DynamicButton from "@components/DynamicButton";
 import RotatingScaleComponent from "@components/RotatingScaleComponent";
-import Card from "@components/Card";
+import GeneratedCard from "@components/GeneratedCard";
 import SmoothScrollwithSection from "@components/SmoothScrollwithSection";
 import HeroBanner from "@components/HeroBanner";
 
@@ -23,8 +23,8 @@ const Page: React.FC = () => {
       ></DynamicButton>
 
       <DynamicButton
-        component={Card}
-        componentName="Card"
+        component={GeneratedCard}
+        componentName="GeneratedCard"
         index={2}
       ></DynamicButton>
 
