@@ -43,8 +43,8 @@ const enhancedRainbowGlow = keyframes`
 `;
 
 const particleEffect = keyframes`
-  0% { opacity: 1; transform: translate(0, 0) scale(1); }
-  100% { opacity: 0; transform: translate(calc(var(--x) * 100px), calc(var(--y) * 100px)) scale(0.5);
+  0% { opacity: 0.8; transform: translate(0, 0) scale(1); }
+  100% { opacity: 1; transform: translate(calc(var(--x) * 100px), calc(var(--y) * 100px)) scale(0.5);
 `;
 
 // 등급별 애니메이션 조합
@@ -172,7 +172,7 @@ const Card = () => {
       <CardBorder $phase={phase} $grade={grade}>
         <CardInner
           style={{
-            transform: phase === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            transform: phase === 'reveal' ? 'rotateY(0deg)' : 'rotateY(180deg)',
           }}
         >
           <CardFront>
