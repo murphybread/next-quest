@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const BOX_SHADOW = {
-  BLUR_RADIUS: "120px",
-  SHADOW_RADIUS: "30px",
+type GradeType = 'rare' | 'unique' | 'legendary' | 'default';
+type AnimationPhase = 'initial' | 'spinning' | 'gradeEffect' | 'reveal';
+
+const CARD_SPIN_TIME = {
+  DEFAULT: 5000, // 기본 회전 시간
+  GRADE_EFFECT: 1000, // 등급 효과 시간
+  SLOW_SPIN: 1000,
 };
 
-// 애니메이션 정의
+// 애니메이션 키프레임 정의
 const spin = keyframes`
   0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(1440deg); } /* 기본 5바퀴 */
+  100% { transform: rotateY(1800deg); }
 `;
 
 const slowSpin = keyframes`
@@ -21,15 +25,14 @@ const grow = keyframes`
   0% { transform: scale(1); }
   100% { transform: scale(1.15); }
 `;
-
 const enhancedBlueGlow = keyframes`
   0%, 100% { box-shadow: 0 0 40px rgba(0, 0, 255, 0); }
-  50% { box-shadow: 0 0 ${BOX_SHADOW["BLUR_RADIUS"]} ${BOX_SHADOW["SHADOW_RADIUS"]} rgba(0, 0, 255, 1); }
+  50% { box-shadow: 0 0 120px 30px rgba(0, 0, 255, 1); }
 `;
 
 const enhancedGoldGlow = keyframes`
   0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0); }
-  50% { box-shadow: 0 0 80px rgba(255, 215, 0, 1); }
+  50% { box-shadow: 0 0 80px 30px rgba(255, 215, 0, 1); }
 `;
 
 const enhancedRainbowGlow = keyframes`
@@ -40,91 +43,66 @@ const enhancedRainbowGlow = keyframes`
 `;
 
 const particleEffect = keyframes`
-  0% { 
-    opacity: 1; 
-    transform: scale(0.5) translate(0, 0);
-  }
-  100% { 
-    opacity: 0; 
-    transform: scale(2) translate(
-      calc(var(--translateX, 0) * 100px), 
-      calc(var(--translateY, 0) * 100px)
-    );
-  }
-`;
-
-const particleAnimation = css`
-  position: relative;
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    background: radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.5),
-      transparent 70%
-    );
-    animation: ${particleEffect} 2s ease-out infinite;
-  }
-  &::before {
-    --translateX: 0.5;
-    --translateY: -0.7;
-  }
-  &::after {
-    --translateX: -0.5;
-    --translateY: 0.7;
-  }
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(calc(var(--x) * 100px), calc(var(--y) * 100px)) scale(0.5);
 `;
 
 // 등급별 애니메이션 조합
 const GradeAnimations = {
-  rare: css`
-    animation:
-      ${spin} 5s linear forwards,
-      ${slowSpin} 1s ease-in 5s forwards,
-      ${enhancedBlueGlow} 1s linear 6s infinite;
-  `,
-  unique: css`
-    animation:
-      ${spin} 4s linear forwards,
-      ${slowSpin} 1s ease-in 4s forwards,
-      ${enhancedBlueGlow} 1s linear 5s infinite,
-      ${slowSpin} 1s ease-in 5s forwards,
-      ${enhancedGoldGlow} 1s linear 6s infinite;
-  `,
-  legendary: css`
-    animation:
-      ${spin} 4s linear forwards,
-      ${slowSpin} 1s ease-in 4s forwards,
-      ${enhancedBlueGlow} 1s linear 5s infinite,
-      ${slowSpin} 1s ease-in 6s forwards,
-      ${enhancedGoldGlow} 1s linear 7s infinite,
-      ${slowSpin} 1s ease-in 8s forwards,
-      ${enhancedRainbowGlow} 1s linear 9s infinite;
-    ${particleAnimation}
-  `,
-  default: css`
-    animation: ${spin} 4s linear forwards;
-  `,
-};
+  getAnimation: (phase: AnimationPhase, grade: GradeType) => {
+    const defaultAnimation = css`${spin} ${CARD_SPIN_TIME.DEFAULT}ms linear forwards`;
+    const rareEffect = css`${enhancedBlueGlow} ${CARD_SPIN_TIME.GRADE_EFFECT}ms linear infinite`;
+    const uniqueEffect = css`${enhancedGoldGlow} ${CARD_SPIN_TIME.GRADE_EFFECT}ms linear infinite`;
+    const legendaryEffect = css`${enhancedRainbowGlow} ${CARD_SPIN_TIME.GRADE_EFFECT}ms linear infinite`;
 
+    const rareAnimation = css`${slowSpin} ${CARD_SPIN_TIME.SLOW_SPIN}ms ease-in ${CARD_SPIN_TIME.DEFAULT}ms forwards, ${rareEffect}, ${particleEffect} 2s ease-out infinite`;
+    const uniqueAnimation = css`${slowSpin} ${CARD_SPIN_TIME.SLOW_SPIN}ms ease-in ${CARD_SPIN_TIME.DEFAULT + CARD_SPIN_TIME.SLOW_SPIN + CARD_SPIN_TIME.GRADE_EFFECT}ms forwards, ${uniqueEffect}, ${particleEffect} 2s ease-out infinite`;
+    const legendaryAnimation = css`${slowSpin} ${CARD_SPIN_TIME.SLOW_SPIN}ms ease-in ${CARD_SPIN_TIME.DEFAULT + (CARD_SPIN_TIME.SLOW_SPIN + CARD_SPIN_TIME.GRADE_EFFECT) * 2}ms forwards, ${legendaryEffect}, ${particleEffect} 2s ease-out infinite`;
+
+    switch (phase) {
+      case 'spinning':
+        return css`
+          animation: ${defaultAnimation};
+        `;
+      case 'gradeEffect':
+        switch (grade) {
+          case 'rare':
+            return css`
+              animation: ${defaultAnimation}, ${rareAnimation}
+            `;
+          case 'unique':
+            return css`
+              animation: ${defaultAnimation}, ${rareAnimation}, ${uniqueAnimation}
+            `;
+          case 'legendary':
+            return css`
+              animation: ${defaultAnimation}, ${rareAnimation}, ${uniqueAnimation}, ${legendaryAnimation}
+            `;
+          default:
+            return '';
+        }
+      case 'reveal':
+        return css`
+          animation: ${particleEffect} 2s ease-out infinite
+        `
+      default:
+        return '';
+    }
+  },
+};
 const CardContainer = styled.div`
-  perspective: 1000px; /* 3D 효과 */
+  perspective: 1000px;
 `;
 
-const CardBorder = styled.div<{ $animationState: string; $grade: string }>`
+interface CardBorderProps {
+  $phase: AnimationPhase;
+  $grade: GradeType;
+}
+
+const CardBorder = styled.div<CardBorderProps>`
   width: 224px;
   height: 324px;
-  background: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.6),
-      rgba(0, 0, 0, 0.9)
-    ),
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.9)),
     linear-gradient(45deg, #bca373, #3b3b3b);
   border-radius: 15px;
   border: 12px solid rgba(255, 255, 255, 0.8);
@@ -133,9 +111,9 @@ const CardBorder = styled.div<{ $animationState: string; $grade: string }>`
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   transform-style: preserve-3d;
-
-  ${(props) => GradeAnimations[props.$grade] || GradeAnimations.default};
+  ${({ $phase, $grade }) => GradeAnimations.getAnimation($phase, $grade)};
 `;
+
 const CardInner = styled.div`
   width: 224px;
   height: 324px;
@@ -166,7 +144,6 @@ const CardFront = styled(CardFace)`
 const CardBack = styled(CardFace)`
   transform: rotateY(180deg);
 `;
-
 const frontImages = {
   0: "/images/initial_front.jpg",
   1: "/images/question_1.jpg",
@@ -177,58 +154,31 @@ const frontImages = {
 const backImage = "/images/card_back.jpg";
 
 const Card = () => {
-  const [animationStep, setAnimationStep] = useState<number>(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const startAnimation = () => {
-    if (isAnimating) return; // 이미 애니메이션 중이면 중복 실행 방지
-
-    setIsAnimating(true);
-
-    // 단계적으로 애니메이션 실행
-    setAnimationStep(1); // 회전 시작
-    setTimeout(() => setAnimationStep(2), 5000); // 느린 회전
-    setTimeout(() => setAnimationStep(3), 7000); // 크기 증가
-    setTimeout(() => {
-      setIsAnimating(false); // 애니메이션 종료 상태로 변경
-    }, 10000);
-  };
+  const [phase, setPhase] = useState<AnimationPhase>('initial');
+  const [grade] = useState<GradeType>('rare');
 
   const handleClick = () => {
-    if (!isAnimating) {
-      // 애니메이션 중이 아닐 때만 처리
-      if (animationStep === 0) {
-        // 초기 상태에서 클릭하면 애니메이션 시작
-        startAnimation();
-      } else {
-        // 애니메이션이 끝난 상태에서 클릭하면 초기화
-        setAnimationStep(0);
-      }
+    if (phase === 'initial') {
+      setPhase('spinning');
+      setTimeout(() => setPhase('reveal'), CARD_SPIN_TIME.DEFAULT);
+      
+    } else if (phase === 'reveal') {
+      setPhase('initial');
     }
   };
 
-  const animationState =
-    animationStep === 1
-      ? "spinning"
-      : animationStep === 2
-        ? "slow-spin"
-        : animationStep === 3
-          ? "growing"
-          : "none";
-
   return (
     <CardContainer onClick={handleClick}>
-      <CardBorder $animationState={animationState} $grade="rare">
+      <CardBorder $phase={phase} $grade={grade}>
         <CardInner
           style={{
-            transform:
-              animationStep === 3 ? "rotateY(180deg)" : "rotateY(0deg)",
+            transform: phase === 'reveal' ? 'rotateY(180deg)' : 'rotateY(0deg)',
           }}
         >
           <CardFront>
             <CardImage
-              src={frontImages[animationStep]}
-              alt={`Card front ${animationStep}`}
+              src={frontImages[phase === 'reveal' ? 3 : 0]}
+              alt={`Card front ${phase === 'reveal' ? 'revealed' : 'hidden'}`}
             />
           </CardFront>
           <CardBack>
@@ -248,5 +198,4 @@ const Card = () => {
 4. 세번 째 클릭으로 카드가 커지면서 공개됩니다.
 5. 네번 째 클릭으로 초기상태로 돌아갑니다.
 `;
-
 export default Card;
