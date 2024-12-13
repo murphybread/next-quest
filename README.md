@@ -1,6 +1,18 @@
+학습의 의미로 next기반의 페이지에서 컴포넌트별로 분리하여 원하는 기능 구현해보기
+
 1. 각 컴포넌트 소개 페이지
-   - 각 컴포넌트별 페이지로 이동
+   - ClickableRotateRectangle
+   - HeroBanner
+   - RotatingScaleComponent
+   - src/components/SmoothScrollwithSection.tsx
 2. 컴포넌트를 원하는 형태로 조합하는 페이지
+
+추후 라이브러리나 프레임워크에 의지하지 않는 기능 구현해보기
+
+- 인피니티 스크롤
+- 무한 슬라이더
+- 실시간 검색 및 필터링
+- 간단한 캘린더
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
